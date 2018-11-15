@@ -13,12 +13,12 @@ class CreateRoleModulesTable extends Migration
      */
     public function up()
     {
-        Schema::create('role_modules', function (Blueprint $table) {
-            $table->increments('id');
-			$table->integer('role_id');
-			$table->integer('module_id');
-			$table->timestamps();
-        });
+        // Schema::create('role_modules', function (Blueprint $table) {
+        //     $table->increments('id');
+		// 	$table->integer('role_id');
+		// 	$table->integer('module_id');
+		// 	$table->timestamps();
+        // });
     }
 
     /**
@@ -28,6 +28,6 @@ class CreateRoleModulesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('role_modules');
+        // Schema::dropIfExists('role_modules');
     }
 }

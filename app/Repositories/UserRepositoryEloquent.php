@@ -105,5 +105,14 @@ class UserRepositoryEloquent extends BaseRepository
     {
         $this->pushCriteria(app(RequestCriteria::class));
     }
-    
+
+    public function list(){
+        $users= User::where('status',0);
+        return $users->paginate(10);
+    }
+
+    public function create(array $arr){
+        $user=new User($arr);
+        return $user->save();
+    }
 }

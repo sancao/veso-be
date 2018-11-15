@@ -33,19 +33,22 @@ class UserController extends Controller
      * @param RegisterUser $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function register(RegisterUser $request)
+    public function add(Request $request)
     {
+        // dd($request->all());
         try {
             $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
             $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
-            $params     = $request->validated();
-
+            $params     = $request->all();
+            // dd($params);
             $this->repository->create([
                 'uuid'          => $uuid->toString(),
                 'email'         => $params['email'],
                 'name'          => $params['name'],
-                'password'      => Hash::make($params['password']),
-                'client_ids'    => $params['client_ids'],
+                'username'      => $params['email'],
+                'phone'      => $params['phone'],
+                'password'      => Hash::make("123"),
+                // 'client_ids'    => $params['client_ids'],
             ]);
 
             //---------- Log --------------
@@ -92,8 +95,8 @@ class UserController extends Controller
             //----------------------------------------
             // 1. Get Permission Route List & Role List of logged user
             //----------------------------------------
-            $routeList  = $this->repository->getRouteList($item->id);
-            $roleList   = $this->repository->getRoleList($item->id);
+            // $routeList  = $this->repository->getRouteList($item->id);
+            // $roleList   = $this->repository->getRoleList($item->id);
 
             //----------------------------------------
             // 2. Get expired datetime
@@ -113,7 +116,7 @@ class UserController extends Controller
                     "id"            => $item->id,
                     "email"         => $item->email,
                     "name"          => $item->name,
-                    "route_list"    => $routeList,
+                    // "route_list"    => $routeList,
                     //"role"  => $item->role,
                     "client_ids"    => $item->client_ids,
                 ]
@@ -126,8 +129,9 @@ class UserController extends Controller
             //------- Return success result -------
             $returnData   = [
                 'token'         => $token,
-                'route_list'    => base64_encode(json_encode($routeList)),
-                'role_list'     => base64_encode(json_encode($roleList)),
+                // 'route_list'    => base64_encode(json_encode($routeList)),
+                // 'role_list'     => base64_encode(json_encode($roleList)),
+                'quyen'         => 'cap1'
             ];
 
             //------- Log ---------
@@ -156,15 +160,53 @@ class UserController extends Controller
      * @param ListUser $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function listUser(ListUser $request)
+    public function listUser(Request $request)
     {
         try {
             // $param    = $request->validated();
 
             // Todo: still not format the result, not filter, paging...
-            $data   = $this->repository->all();
+            $users   = $this->repository->list();
 
-            return Helper::jsonOK(__('common.ok'), $data);
+            $response = [
+                'pagination' => [
+                    'total' => $users->total(),
+                    'per_page' => $users->perPage(),
+                    'current_page' => $users->currentPage(),
+                    'last_page' => $users->lastPage(),
+                    'from' => $users->firstItem(),
+                    'to' => $users->lastItem()
+                ],
+                'data' => $users
+            ];
+
+            return Helper::jsonOK(__('common.ok'), $response);
+
+
+            // $user = Auth::user();
+            // dd($user);
+            // $companies=$this->company->getCompanies(5,$request['text']); 
+            // $trs_search=$request['text'];
+            // $companies = Cache::remember('companies', 22*60, function() {
+            //     return $this->company->getCompanies(5,$trs_search); 
+            // });
+
+
+            // $response = [
+            //     'pagination' => [
+            //         'total' => $companies->total(),
+            //         'per_page' => $companies->perPage(),
+            //         'current_page' => $companies->currentPage(),
+            //         'last_page' => $companies->lastPage(),
+            //         'from' => $companies->firstItem(),
+            //         'to' => $companies->lastItem()
+            //     ],
+            //     'data' => $companies
+            // ];
+            
+            // return $this->common->responseToJson(True,200,'success',$response);
+
+
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());
@@ -176,7 +218,7 @@ class UserController extends Controller
      * @param RegisterUser $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function add(RegisterUser $request)
+    public function editUser(Request $request)
     {
         try {
             $uuidStr    = 'user.user-add' . rand(1000, 9999) . time();

@@ -11,7 +11,7 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @package namespace App\Entities;
  */
-class User extends Model implements Transformable
+class Daily extends Model implements Transformable
 {
     use TransformableTrait;
 
@@ -21,6 +21,6 @@ class User extends Model implements Transformable
      * @var array
      */
     protected $fillable = [
-        'name','uuid','username', 'email','phone', 'password','status','address'
+        'madaily','uuid','tendaily', 'diachi','sodienthoai', 'cap','dailyquanly'
     ];
 }

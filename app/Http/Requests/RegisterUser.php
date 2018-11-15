@@ -23,10 +23,10 @@ class RegisterUser extends BaseRequest
     public function rules()
     {
         return [
-            'name'          => 'required|max:255',
-            'email'         => 'required|email|max:255|unique:users,email',
-            'password'      => 'required|min:6',
-            'client_ids'    => 'required|array',
+            // 'name'          => 'required|max:255',
+            // 'email'         => 'required|email|max:255|unique:users,email',
+            // 'password'      => 'required|min:6',
+            // 'username'      => 'required|min:2'
         ];
     }
 
@@ -48,6 +48,8 @@ class RegisterUser extends BaseRequest
             'password.required' => 'Password is required',
             'password.min'      => 'Password at least 6 characters',
 
+            'username.required' => 'Username is required',
+            'username.min'      => 'Username at least 2 characters'
         ];
     }
 }

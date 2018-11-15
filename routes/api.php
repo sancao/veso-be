@@ -21,9 +21,9 @@ Route::post('logout',       'UserController@logout');
 
 
 
-Route::group(['middleware' => 'jwt'], function () {
+// Route::group(['middleware' => 'jwt'], function () {
 
-    Route::post('user/list',         'UserController@listUser');
+    Route::get('user/list',         'UserController@listUser');
     Route::post('user/add',         'UserController@add');
     Route::post('user/edit',        'UserController@edit');
     //Route::post('user/delete',      'UserController@delete');
@@ -40,4 +40,8 @@ Route::group(['middleware' => 'jwt'], function () {
     Route::post('module/edit',      'ModuleController@edit');
     Route::post('module/delete',    'ModuleController@delete');
 
-});
+    Route::get('daily/list',         'DailyController@listDaily');
+    Route::post('daily/add',         'DailyController@add');
+    Route::post('daily/edit',        'DailyController@edit');
+    //Route::post('daily/delete',      'DailyController@delete');
+// });

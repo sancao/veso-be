@@ -13,17 +13,14 @@ use Faker\Generator as Faker;
 |
 */
 
-$factory->define(App\Entities\User::class, function (Faker $faker) {
+$factory->define(App\Entities\Daily::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
+        'tendaily' => $faker->name,
         'uuid'=> $faker->uuid,
-        'username'=>$faker->unique()->safeEmail,
-        'email'=>$faker->unique()->safeEmail,
-        'phone' => $faker->phoneNumber,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'quyen'=>'cap4',
-        'status'=>0,
-        'remember_token' => str_random(10),
+        'madaily'=>$faker->unique()->safeEmail,
+        'dailyquanly'=>1,
+        'diachi'=>$faker->unique()->address,
+        'sodienthoai' => $faker->phoneNumber,
+        'cap' => 'cap4',
     ];
 });

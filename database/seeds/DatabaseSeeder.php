@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Auth\User;
 use Ramsey\Uuid\Uuid;
+use App\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,12 +14,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
-        User::create([
+        factory(App\Entities\User::class,100)->create();
+        App\Entities\User::create([
             'name' => 'Jane',
+            'status'=>false,
+            'username' => 'sangcao',
+            'address'=>'Tay Ninh',
+            'phone'=>'0917044714',
             'email' => 'a@a.com',
-            'password' => bcrypt('123'),
-            'user_uuid'=>Uuid::uuid4()
+            'password' => bcrypt('sangcao'),
+            'uuid'=>Uuid::uuid4()
         ]);
+        
+        factory(App\Entities\Daily::class,10)->create();
     }
 }
