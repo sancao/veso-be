@@ -44,4 +44,8 @@ Route::post('logout',       'UserController@logout');
     Route::post('daily/add',         'DailyController@add');
     Route::post('daily/edit',        'DailyController@edit');
     //Route::post('daily/delete',      'DailyController@delete');
+
+    Route::get('chonso/list',         'ChonsoController@list');
+
+    Route::get('naptien/list',         'UserController@list_naptien');
 // });

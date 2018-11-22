@@ -6,6 +6,8 @@ use Prettus\Repository\Eloquent\BaseRepository;
 use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\UserRepository;
 use App\Entities\User;
+use App\Entities\Chonso;
+use App\Entities\Naptien;
 use App\Validators\UserValidator;
 
 use Illuminate\Support\Facades\DB;
@@ -114,5 +116,15 @@ class UserRepositoryEloquent extends BaseRepository
     public function create(array $arr){
         $user=new User($arr);
         return $user->save();
+    }
+
+    public function list_chonso(){
+        $list= Chonso::where('deleted',0);
+        return $list->paginate(10);
+    }
+
+    public function list_naptien(){
+        $list= Naptien::where('trangthai',0);
+        return $list->paginate(10);
     }
 }

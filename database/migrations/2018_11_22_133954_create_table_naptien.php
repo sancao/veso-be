@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTableDaily extends Migration
+class CreateTableNaptien extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateTableDaily extends Migration
      */
     public function up()
     {
-        Schema::create('dailies', function (Blueprint $table) {
+        Schema::create('naptiens', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid');
-            $table->string('madaily')->unique();
             $table->string('tendaily');
-            $table->string('diachi')->nullable();
-            $table->string('sodienthoai')->unique();
-            $table->integer('dailyquanly')->nullable();
-            $table->enum('cap', array('cap1', 'cap2','cap3','cap4'))->default("cap2");
-            $table->boolean('deleted')->default(false);
+            $table->decimal('sotien')->nullable();
+            $table->date('ngaynap')->nullable();
+            $table->boolean('trangthai')->default(false);
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ class CreateTableDaily extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('dailies');
+        Schema::dropIfExists('naptiens');
     }
 }

@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->enum('quyen', array('cap1', 'cap2','cap3','cap4'))->default("cap4");
             $table->boolean('status')->default(false);
-            $table->softDeletes();
+            $table->boolean('deleted')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });

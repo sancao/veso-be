@@ -27,5 +27,7 @@ class DatabaseSeeder extends Seeder
         ]);
         
         factory(App\Entities\Daily::class,10)->create();
+        factory(App\Entities\Chonso::class,50)->create();
+        factory(App\Entities\Naptien::class,50)->create();
     }
 }

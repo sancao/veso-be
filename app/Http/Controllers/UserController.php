@@ -295,4 +295,29 @@ class UserController extends Controller
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());
         }
     }
+
+
+    public function list_naptien(Request $request)
+    {
+        try {
+            $list   = $this->repository->list_naptien();
+
+            $response = [
+                'pagination' => [
+                    'total' => $list->total(),
+                    'per_page' => $list->perPage(),
+                    'current_page' => $list->currentPage(),
+                    'last_page' => $list->lastPage(),
+                    'from' => $list->firstItem(),
+                    'to' => $list->lastItem()
+                ],
+                'data' => $list
+            ];
+
+            return Helper::jsonOK(__('common.ok'), $response);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        }
+    }
 }
