@@ -14,10 +14,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+        factory(App\Entities\Daily::class,10)->create();
         factory(App\Entities\User::class,100)->create();
         App\Entities\User::create([
             'name' => 'Jane',
             'status'=>false,
+            'daily_id'=>0,
             'username' => 'sangcao',
             'address'=>'Tay Ninh',
             'phone'=>'0917044714',
@@ -26,7 +28,6 @@ class DatabaseSeeder extends Seeder
             'uuid'=>Uuid::uuid4()
         ]);
         
-        factory(App\Entities\Daily::class,10)->create();
         factory(App\Entities\Chonso::class,50)->create();
         factory(App\Entities\Naptien::class,50)->create();
     }

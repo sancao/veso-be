@@ -35,20 +35,19 @@ class UserController extends Controller
      */
     public function add(Request $request)
     {
-        // dd($request->all());
         try {
             $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
             $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
             $params     = $request->all();
-            // dd($params);
             $this->repository->create([
                 'uuid'          => $uuid->toString(),
+                'daily_id'         => $params['daily_id'],
                 'email'         => $params['email'],
                 'name'          => $params['name'],
                 'username'      => $params['email'],
                 'phone'      => $params['phone'],
+                'address'    => $params['diachi'],
                 'password'      => Hash::make("123"),
-                // 'client_ids'    => $params['client_ids'],
             ]);
 
             //---------- Log --------------
@@ -131,7 +130,7 @@ class UserController extends Controller
                 'token'         => $token,
                 // 'route_list'    => base64_encode(json_encode($routeList)),
                 // 'role_list'     => base64_encode(json_encode($roleList)),
-                'quyen'         => 'cap1'
+                'cap_daily'         => 'cap1'
             ];
 
             //------- Log ---------
@@ -315,6 +314,29 @@ class UserController extends Controller
             ];
 
             return Helper::jsonOK(__('common.ok'), $response);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        }
+    }
+
+    public function check_email_unique($value){
+        try {
+            $flag=$this->repository->check_email_unique($value);
+
+            return Helper::jsonOK(__('common.ok'),$flag);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        }
+    }
+
+    public function check_phone_unique($value)
+    {
+        try {
+            $flag=$this->repository->check_phone_unique($value);
+
+            return Helper::jsonOK(__('common.ok'),$flag);
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());

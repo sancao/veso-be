@@ -2,6 +2,7 @@
 
 use Faker\Generator as Faker;
 
+
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -14,13 +15,14 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Entities\Daily::class, function (Faker $faker) {
+    
     return [
         'tendaily' => $faker->name,
         'uuid'=> $faker->uuid,
         'madaily'=>$faker->unique()->safeEmail,
         'dailyquanly'=>1,
-        'diachi'=>$faker->unique()->address,
+        'diachi'=>$faker->address,
         'sodienthoai' => $faker->phoneNumber,
-        'cap' => 'cap4',
+        'cap' => $faker->randomElement(['cap1', 'cap2','cap3','cap4']),
     ];
 });

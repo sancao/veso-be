@@ -110,12 +110,13 @@ class UserRepositoryEloquent extends BaseRepository
 
     public function list(){
         $users= User::where('status',0);
-        return $users->paginate(10);
+        return $users->paginate(17);
     }
 
     public function create(array $arr){
         $user=new User($arr);
-        return $user->save();
+        $user->save();
+        return $user;
     }
 
     public function list_chonso(){
@@ -126,5 +127,23 @@ class UserRepositoryEloquent extends BaseRepository
     public function list_naptien(){
         $list= Naptien::where('trangthai',0);
         return $list->paginate(10);
+    }
+
+    public function check_email_unique($email){
+        $user=User::where("email",$email)->first();
+        if($user){
+            return false;
+        }
+
+        return true;
+    }
+
+    public function check_phone_unique($phone){
+        $user=User::where("phone",$phone)->first();
+        if($user){
+            return true;
+        }
+
+        return true;
     }
 }

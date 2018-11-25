@@ -28,23 +28,23 @@ class DailyController extends Controller
     {
         // dd($request->all());
         try {
-            $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
-            $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
+            // $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
+            // $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
             $params     = $request->all();
-            $this->repository->create([
-                'uuid'          => $uuid->toString(),
-                'tendaily'          => $params['tendaily'],
-                'diachi'      => $params['diachi'],
-                'sodienthoai'      => $params['sodienthoai'],
-                'matkhau'      => Hash::make("123"),
-                'cap'    => 'cap4',
-            ]);
+            $user=$this->repository->create($params);
+            //     'uuid'          => $uuid->toString(),
+            //     'tendaily'          => $params['tendaily'],
+            //     'diachi'      => $params['diachi'],
+            //     'sodienthoai'      => $params['sodienthoai'],
+            //     'matkhau'      => Hash::make("123"),
+            //     'cap'    => $params['cap'],
+            // ]);
 
             //---------- Log --------------
             Logger::log('info', __('user.log_register'), $params);
             //---------- Log --------------
 
-            return Helper::jsonOK(__('common.ok'));
+            return Helper::jsonOK(__('common.ok'),$user);
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());
@@ -57,7 +57,7 @@ class DailyController extends Controller
     public function listDaily(Request $request)
     {
         try {
-            $daily   = $this->repository->list();
+            $daily   = $this->repository->list(0,$request["text"]);
 
             $response = [
                 'pagination' => [
@@ -72,6 +72,18 @@ class DailyController extends Controller
             ];
 
             return Helper::jsonOK(__('common.ok'), $response);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        }
+    }
+
+    public function list_all()
+    {
+        try {
+            $daily   = $this->repository->listAll(0);
+
+            return Helper::jsonOK(__('common.ok'), $daily);
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());

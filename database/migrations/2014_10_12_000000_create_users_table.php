@@ -15,6 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('daily_id');
             $table->uuid('uuid');
             $table->string('name')->nullable();
             $table->string('username')->unique();
@@ -23,7 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('quyen', array('cap1', 'cap2','cap3','cap4'))->default("cap4");
+            // $table->enum('cap_daily', array('cap1', 'cap2','cap3','cap4'))->default("cap4");
+            $table->enum('quyen', array('admin', 'daily','nhanvien','banve'))->default("nhanvien");
             $table->boolean('status')->default(false);
             $table->boolean('deleted')->default(false);
             $table->rememberToken();

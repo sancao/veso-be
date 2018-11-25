@@ -1,7 +1,7 @@
 <?php
 
 use Faker\Generator as Faker;
-
+use App\Entities\Daily;
 /*
 |--------------------------------------------------------------------------
 | Model Factories
@@ -14,8 +14,10 @@ use Faker\Generator as Faker;
 */
 
 $factory->define(App\Entities\User::class, function (Faker $faker) {
+    $dailies = Daily::pluck('id')->All();
     return [
         'name' => $faker->name,
+        'daily_id'=>$faker->randomElement($dailies),
         'uuid'=> $faker->uuid,
         'address'=>$faker->address,
         'username'=>$faker->unique()->safeEmail,
@@ -23,7 +25,7 @@ $factory->define(App\Entities\User::class, function (Faker $faker) {
         'phone' => $faker->phoneNumber,
         'email_verified_at' => $faker->dateTime(),
         'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'quyen'=>$faker->randomElement(['cap1', 'cap2','cap3','cap4']),
+        'quyen'=>$faker->randomElement(['nhanvien', 'daily','banve']),
         'status'=>$faker->numberBetween(0, 1),
         'remember_token' => str_random(10),
     ];

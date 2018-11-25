@@ -41,11 +41,13 @@ Route::post('logout',       'UserController@logout');
     Route::post('module/delete',    'ModuleController@delete');
 
     Route::get('daily/list',         'DailyController@listDaily');
+    Route::get('daily/list-all',     'DailyController@list_all');
     Route::post('daily/add',         'DailyController@add');
     Route::post('daily/edit',        'DailyController@edit');
     //Route::post('daily/delete',      'DailyController@delete');
 
     Route::get('chonso/list',         'ChonsoController@list');
 
-    Route::get('naptien/list',         'UserController@list_naptien');
+    Route::get('email/unique/{value}', 'UserController@check_email_unique');
+    Route::get('phone/unique/{value}', 'UserController@check_phone_unique');
 // });
