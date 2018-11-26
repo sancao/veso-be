@@ -23,4 +23,9 @@ class Daily extends Model implements Transformable
     protected $fillable = [
         'madaily','uuid','tendaily', 'diachi','sodienthoai', 'cap','dailyquanly'
     ];
+
+    public function users()
+    {
+        return $this->hasMany('App\Entities\User', 'daily_id','id');
+    }
 }

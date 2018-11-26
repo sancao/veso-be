@@ -15,7 +15,8 @@ class ManHinhChonSo extends Migration
     {
         Schema::create('chonsos', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('uuid');
+            $table->integer('daily_id');
+            $table->integer('user_id');
             $table->integer('soduthuong')->nullable();
             $table->decimal('tienduthuong')->nullable();
             $table->integer('hanmucconso')->nullable();
@@ -25,6 +26,10 @@ class ManHinhChonSo extends Migration
             $table->string('daiduthuong')->nullable();
             $table->string('mobile')->nullable();
             $table->string('menhgia')->nullable();
+            $table->integer('menhgia10')->unsigned();
+            $table->integer('menhgia20')->unsigned();
+            $table->integer('menhgia50')->unsigned();
+            $table->boolean('daimacdinh')->default(false);
             $table->boolean('deleted')->default(false);
             $table->timestamps();
         });

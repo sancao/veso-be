@@ -23,4 +23,9 @@ class User extends Model implements Transformable
     protected $fillable = [
         'name','daily_id','uuid','username', 'email','phone', 'password','status','address','quyen'
     ];
+
+    public function daily()
+    {
+        return $this->belongsTo('App\Entities\Daily', 'daily_id','id');
+    }
 }

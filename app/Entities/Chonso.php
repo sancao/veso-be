@@ -22,6 +22,6 @@ class Chonso extends Model implements Transformable
      */
     protected $fillable = [
         'soduthuong','uuid','tienduthuong', 'loduthuong','daiduthuong', 'mobild','hanmucconso',
-        'tonghanmuc','menhgia'
+        'tonghanmuc','menhgia','daily_id','user_id','menhgia10','menhgia20','menhgia50'
     ];
 }

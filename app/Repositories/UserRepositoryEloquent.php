@@ -30,7 +30,6 @@ class UserRepositoryEloquent extends BaseRepository
 
     public function updateRole($param)
     {
-
         // uuid & role_list
         $userId = $param['id'];
         $roleList = json_decode($param['role_list'], true);
@@ -108,15 +107,67 @@ class UserRepositoryEloquent extends BaseRepository
         $this->pushCriteria(app(RequestCriteria::class));
     }
 
-    public function list(){
-        $users= User::where('status',0);
-        return $users->paginate(17);
+    public function list($user_id=0,$text){
+        $users= User::join('dailies', 'dailies.id','=','users.daily_id')    
+        ->select('users.name','users.address','users.id','users.quyen'
+        ,'users.phone','dailies.tendaily','dailies.id as daily_id','users.email');
+
+        // $companies->where(['dailies.user_id' => $user_id]);      
+        
+        if($text){
+            $users->where(function ($query) use($text) {
+                $query->orWhere('dailies.tendaily','LIKE', '%'.$text.'%')
+                ->orWhere('users.name' ,'LIKE', '%'.$text.'%')
+                ->orWhere('users.phone' ,'LIKE', '%'.$text.'%')
+                ->orWhere('users.address' ,'LIKE', '%'.$text.'%')           
+                ->orWhere('users.email' ,'LIKE', '%'.$text.'%');
+            });
+        }
+
+        return $users
+                ->orderBy('users.name', 'desc')
+                ->paginate(15);
     }
 
     public function create(array $arr){
-        $user=new User($arr);
-        $user->save();
+        $user=User::with(['daily'])->find($arr["id"]);
+        
+        if($user)
+        {
+            $user->name=$arr["name"];
+            $user->quyen=$arr["quyen"];
+            $user->phone=$arr["phone"];
+            $user->address=$arr["address"];
+            $user->daily_id=$arr["daily_id"];
+            $user->update();
+        }else
+        {
+            $user=new User($arr);
+            $user->save();
+        }
+
         return $user;
+    }
+    
+    //save chọn số 
+    public function save_chonso(array $arr){
+        $chonso=Chonso::with(['daily','user'])->find($arr["id"]);
+        
+        if($chonso)
+        {
+            $chonso->daily_id=$arr["daily_id"];
+            $chonso->user_id=$arr["user_id"];
+            $chonso->soduthuong=$arr["soduthuong"];
+            $chonso->tienduthuong=$arr["tienduthuong"];
+            $chonso->hanmucconso=$arr["hanmucconso"];
+            $chonso->update();
+        }else
+        {
+            $chonso=new Chonso($arr);
+            $chonso->save();
+        }
+
+        return $chonso;
     }
 
     public function list_chonso(){

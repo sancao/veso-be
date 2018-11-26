@@ -47,6 +47,7 @@ Route::post('logout',       'UserController@logout');
     //Route::post('daily/delete',      'DailyController@delete');
 
     Route::get('chonso/list',         'ChonsoController@list');
+    Route::post('chonso/add',         'ChonsoController@add');
 
     Route::get('email/unique/{value}', 'UserController@check_email_unique');
     Route::get('phone/unique/{value}', 'UserController@check_phone_unique');

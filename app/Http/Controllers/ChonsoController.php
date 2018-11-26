@@ -27,23 +27,31 @@ class ChonsoController extends Controller
     public function add(Request $request)
     {
         try {
-            $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
-            $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
             $params     = $request->all();
-            $this->repository->create([
-                'uuid'          => $uuid->toString(),
-                'tendaily'          => $params['tendaily'],
-                'diachi'      => $params['diachi'],
-                'sodienthoai'      => $params['sodienthoai'],
-                'matkhau'      => Hash::make("123"),
-                'cap'    => 'cap4',
+            $chonso=$this->repository->save_chonso([
+                'id'                => $params['id'],
+                'daily_id'          => 1,
+                'user_id'           => 1,
+                'mobile'           => "0917044715",
+                'soduthuong'      => $params['soduthuong'],
+                'tienduthuong'      => $params['tienduthuong'],
+                'hanmucconso'      => $params['hanmucconso'],
+                'tonghanmuc'      => $params['tonghanmuc'],
+                'ngayduthuong'      => $params['ngayduthuong'],
+                'loduthuong'      => $params['loduthuong'],
+                'daiduthuong'      => $params['daiduthuong'],
+                'menhgia'      => $params['menhgia10'],
+                'menhgia10'      => $params['menhgia10'],
+                'menhgia20'      => $params['menhgia20'],
+                'menhgia50'    => $params['menhgia50'],
+                'daimacdinh'    => $params['daimacdinh'],
             ]);
 
             //---------- Log --------------
             Logger::log('info', __('user.log_register'), $params);
             //---------- Log --------------
 
-            return Helper::jsonOK(__('common.ok'));
+            return Helper::jsonOK(__('common.ok'),$chonso);
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());

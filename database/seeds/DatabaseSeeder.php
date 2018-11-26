@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Entities\Daily::class,10)->create();
-        factory(App\Entities\User::class,100)->create();
+        factory(App\Entities\Daily::class,5)->create();
+        factory(App\Entities\User::class,20)->create();
         App\Entities\User::create([
             'name' => 'Jane',
             'status'=>false,
@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             'uuid'=>Uuid::uuid4()
         ]);
         
-        factory(App\Entities\Chonso::class,50)->create();
-        factory(App\Entities\Naptien::class,50)->create();
+        factory(App\Entities\Chonso::class,5)->create();
+        factory(App\Entities\Naptien::class,5)->create();
     }
 }

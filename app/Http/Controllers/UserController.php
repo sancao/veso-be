@@ -39,14 +39,16 @@ class UserController extends Controller
             $uuidStr    = 'user.user-register' . rand(1000, 9999) . time();
             $uuid       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidStr);
             $params     = $request->all();
-            $this->repository->create([
+            $user=$this->repository->create([
+                'id'            =>$params['id'],
                 'uuid'          => $uuid->toString(),
                 'daily_id'         => $params['daily_id'],
                 'email'         => $params['email'],
                 'name'          => $params['name'],
+                'quyen'          => $params['quyen'],
                 'username'      => $params['email'],
                 'phone'      => $params['phone'],
-                'address'    => $params['diachi'],
+                'address'    => $params['address'],
                 'password'      => Hash::make("123"),
             ]);
 
@@ -54,7 +56,7 @@ class UserController extends Controller
             Logger::log('info', __('user.log_register'), $params);
             //---------- Log --------------
 
-            return Helper::jsonOK(__('common.ok'));
+            return Helper::jsonOK(__('common.ok'),$user);
         } catch (\Exception $e) {
             report($e);
             return Helper::jsonNG(__('common.err_code'), $e->getMessage());
@@ -165,7 +167,7 @@ class UserController extends Controller
             // $param    = $request->validated();
 
             // Todo: still not format the result, not filter, paging...
-            $users   = $this->repository->list();
+            $users   = $this->repository->list(0,$request["text"]);
 
             $response = [
                 'pagination' => [
