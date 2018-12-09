@@ -32,7 +32,7 @@ class ChonsoController extends Controller
                 'id'                => $params['id'],
                 'daily_id'          => 1,
                 'user_id'           => 1,
-                'mobile'           => "0917044715",
+                'sodienthoai'     => $params['sodienthoai'],
                 'soduthuong'      => $params['soduthuong'],
                 'tienduthuong'      => $params['tienduthuong'],
                 'hanmucconso'      => $params['hanmucconso'],
@@ -40,11 +40,9 @@ class ChonsoController extends Controller
                 'ngayduthuong'      => $params['ngayduthuong'],
                 'loduthuong'      => $params['loduthuong'],
                 'daiduthuong'      => $params['daiduthuong'],
-                'menhgia'      => $params['menhgia10'],
                 'menhgia10'      => $params['menhgia10'],
                 'menhgia20'      => $params['menhgia20'],
-                'menhgia50'    => $params['menhgia50'],
-                'daimacdinh'    => $params['daimacdinh'],
+                'menhgia50'    => $params['menhgia50']
             ]);
 
             //---------- Log --------------
@@ -100,6 +98,20 @@ class ChonsoController extends Controller
                 'client_ids'    => $params['client_ids'],
             ]);
 
+            return Helper::jsonOK(__('common.ok'), $result);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        } catch (UnsatisfiedDependencyException $e) {
+            report($e);
+            return Helper::jsonNG(__('common.uuid_error'), $e->getMessage());
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $result= $this->repository->delete_so($request['id']);
             return Helper::jsonOK(__('common.ok'), $result);
         } catch (\Exception $e) {
             report($e);

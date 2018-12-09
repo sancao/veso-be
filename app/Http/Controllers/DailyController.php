@@ -114,4 +114,18 @@ class DailyController extends Controller
             return Helper::jsonNG(__('common.uuid_error'), $e->getMessage());
         }
     }
+
+    public function delete(Request $request)
+    {
+        try {
+            $result= $this->repository->delete($request['id']);
+            return Helper::jsonOK(__('common.ok'), $result);
+        } catch (\Exception $e) {
+            report($e);
+            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
+        } catch (UnsatisfiedDependencyException $e) {
+            report($e);
+            return Helper::jsonNG(__('common.uuid_error'), $e->getMessage());
+        }
+    }
 }

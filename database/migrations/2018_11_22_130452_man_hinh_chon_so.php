@@ -17,6 +17,7 @@ class ManHinhChonSo extends Migration
             $table->increments('id');
             $table->integer('daily_id');
             $table->integer('user_id');
+            $table->string('sodienthoai',15)->unique();
             $table->integer('soduthuong')->nullable();
             $table->decimal('tienduthuong')->nullable();
             $table->integer('hanmucconso')->nullable();
@@ -24,12 +25,9 @@ class ManHinhChonSo extends Migration
             $table->date('ngayduthuong')->nullable();
             $table->string('loduthuong')->nullable();
             $table->string('daiduthuong')->nullable();
-            $table->string('mobile')->nullable();
-            $table->string('menhgia')->nullable();
             $table->integer('menhgia10')->unsigned();
             $table->integer('menhgia20')->unsigned();
             $table->integer('menhgia50')->unsigned();
-            $table->boolean('daimacdinh')->default(false);
             $table->boolean('deleted')->default(false);
             $table->timestamps();
         });

@@ -335,13 +335,8 @@ class UserController extends Controller
 
     public function check_phone_unique($value)
     {
-        try {
-            $flag=$this->repository->check_phone_unique($value);
+        $flag=$this->repository->check_phone_unique($value);
 
-            return Helper::jsonOK(__('common.ok'),$flag);
-        } catch (\Exception $e) {
-            report($e);
-            return Helper::jsonNG(__('common.err_code'), $e->getMessage());
-        }
+        return response()->json(['data'=> $flag]);
     }
 }

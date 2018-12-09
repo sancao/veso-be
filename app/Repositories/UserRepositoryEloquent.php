@@ -112,7 +112,7 @@ class UserRepositoryEloquent extends BaseRepository
         ->select('users.name','users.address','users.id','users.quyen'
         ,'users.phone','dailies.tendaily','dailies.id as daily_id','users.email');
 
-        // $companies->where(['dailies.user_id' => $user_id]);      
+        // $users->where(['dailies.user_id' => $user_id]);      
         
         if($text){
             $users->where(function ($query) use($text) {
@@ -140,11 +140,20 @@ class UserRepositoryEloquent extends BaseRepository
             $user->address=$arr["address"];
             $user->daily_id=$arr["daily_id"];
             $user->update();
+            return self::getUserDailyById($user->id);
         }else
         {
             $user=new User($arr);
             $user->save();
         }
+
+        return $user;
+    }
+
+    private function getUserDailyById($id){
+        $user= User::join('dailies', 'dailies.id','=','users.daily_id')    
+        ->select('dailies.tendaily')
+        ->where('users.id',$id)->first();
 
         return $user;
     }
@@ -180,10 +189,13 @@ class UserRepositoryEloquent extends BaseRepository
         return $list->paginate(10);
     }
 
-    public function check_email_unique($email){
-        $user=User::where("email",$email)->first();
+    public function check_email_unique($value){
+        $user=User::where("email",$value)->first();
         if($user){
             return false;
+        }else{
+            $user=User::where("username",$value)->first();
+            return $user==null;
         }
 
         return true;
@@ -192,9 +204,19 @@ class UserRepositoryEloquent extends BaseRepository
     public function check_phone_unique($phone){
         $user=User::where("phone",$phone)->first();
         if($user){
-            return true;
+            return false;
         }
 
         return true;
+    }
+
+    public function delete_so($id){
+        if($id){
+            $so= Chonso::find($id);
+            $so->deleted=1;
+            return $so->update();
+        }
+        
+        return false;
     }
 }

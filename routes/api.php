@@ -44,10 +44,11 @@ Route::post('logout',       'UserController@logout');
     Route::get('daily/list-all',     'DailyController@list_all');
     Route::post('daily/add',         'DailyController@add');
     Route::post('daily/edit',        'DailyController@edit');
-    //Route::post('daily/delete',      'DailyController@delete');
+    Route::delete('daily/delete/{id}', 'DailyController@delete');
 
     Route::get('chonso/list',         'ChonsoController@list');
     Route::post('chonso/add',         'ChonsoController@add');
+    Route::delete('chonso/delete/{id}', 'ChonsoController@delete');
 
     Route::get('email/unique/{value}', 'UserController@check_email_unique');
     Route::get('phone/unique/{value}', 'UserController@check_phone_unique');

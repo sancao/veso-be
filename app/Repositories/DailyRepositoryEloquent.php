@@ -17,7 +17,8 @@ class DailyRepositoryEloquent extends BaseRepository
     }
 
     public function list($user_id=0,$text){
-        $companies= Daily::where('dailyquanly',1);
+        $companies= Daily::where('dailyquanly',1)
+        ->where('deleted',0);
         // return $list->paginate(10);
 
         // $companies= Daily::join('users', 'dailies.user_id','=','users.id')    
@@ -47,6 +48,7 @@ class DailyRepositoryEloquent extends BaseRepository
 
     public function listAll($user_id=0){
         return Daily::where('dailyquanly',1)
+        ->where('deleted',0)
         ->select('id as value','tendaily as text')
         ->get();
     }
@@ -58,23 +60,11 @@ class DailyRepositoryEloquent extends BaseRepository
             $daily->tendaily=$arr["tendaily"];
             $daily->diachi=$arr["diachi"];
             $daily->sodienthoai=$arr["sodienthoai"];
-            $daily->cap="cap4";
+            $daily->cap=$arr["cap"];
             $daily->dailyquanly=1;
             $daily->save();
             return $daily;
         }else{
-            // $uuidUserStr    = 'user.user-create' . rand(1000, 9999) . time();
-            // $uuidUser       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidUserStr);
-            // $user=new User();
-            // $user->name=$arr["tendaily"];
-            // $user->uuid=$uuidUser->toString();
-            // $user->username=$arr["email"]??$arr["sodienthoai"];
-            // $user->email=$arr["email"];
-            // $user->phone=$arr["sodienthoai"];
-            // $user->address=$arr["diachi"];
-            // $user->quyen="daily";
-            // $user->password='$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm';
-
             $uuidDailyStr    = 'user.user-create' . rand(1000, 9999) . time();
             $uuidDaily       = Uuid::uuid3(Uuid::NAMESPACE_DNS, $uuidDailyStr);
             $daily=new Daily();
@@ -84,15 +74,8 @@ class DailyRepositoryEloquent extends BaseRepository
             $daily->sodienthoai=$arr["sodienthoai"];
             $daily->cap="cap4";
             $daily->dailyquanly=1;
-
-            // DB::transaction(function() use ($user,$daily)
-            // {
-            //     $user->save();
-                $daily->madaily=self::getMaDaiLy("MDL0000");
-            //     $daily->user_id=$user->id;
-                $daily->save();
-            // });
-
+            $daily->madaily=self::getMaDaiLy("MDL0000");
+            $daily->save();
             return $daily;
         }
     }
@@ -100,9 +83,19 @@ class DailyRepositoryEloquent extends BaseRepository
     private function getMaDaiLy($str){
         $last_daily=Daily::orderBy('id', 'desc')->first();
         if($last_daily){
-            return $str.$last_daily->id;
+            return $str.($last_daily->id+1);
         }
 
         return $str."1";
+    }
+
+    public function delete($id){
+        if($id){
+            $daily= Daily::find($id);
+            $daily->deleted=1;
+            return $daily->update();
+        }
+        
+        return false;
     }
 }

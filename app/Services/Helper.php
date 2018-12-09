@@ -22,6 +22,11 @@ class Helper
         ]);
     }
 
+    public static function jsonBool($status)
+    {
+        return response()->json($status);
+    }
+
     /**
      * Return Not Good result to API response
      * @param $message
