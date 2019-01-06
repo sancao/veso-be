@@ -16,9 +16,9 @@ Route::post('register',     'UserController@register');
 Route::post('login',        'UserController@login');
 Route::post('logout',       'UserController@logout');
 
-//Route::post('add-queue',  'ApiController@addQueue');
-//Route::post('upload-s3',  'ApiController@uploadS3');
 
+Route::get('email/unique/{value}', 'UserController@check_email_unique');
+Route::get('phone/unique/{value}', 'UserController@check_phone_unique');
 
 
 // Route::group(['middleware' => 'jwt'], function () {
@@ -26,19 +26,7 @@ Route::post('logout',       'UserController@logout');
     Route::get('user/list',         'UserController@listUser');
     Route::post('user/add',         'UserController@add');
     Route::post('user/edit',        'UserController@edit');
-    //Route::post('user/delete',      'UserController@delete');
-    Route::post('user/update-role', 'UserController@updateRole');
-
-    Route::get('role/list',         'RoleController@listData');
-    Route::post('role/add',         'RoleController@add');
-    Route::post('role/edit',        'RoleController@edit');
-    Route::post('role/delete',      'RoleController@delete');
-    Route::post('role/update-module', 'RoleController@updateModule');
-
-    Route::get('module/list',       'ModuleController@listModule');
-    Route::post('module/add',       'ModuleController@add');
-    Route::post('module/edit',      'ModuleController@edit');
-    Route::post('module/delete',    'ModuleController@delete');
+    Route::post('user/delete',      'UserController@delete');
 
     Route::get('daily/list',         'DailyController@listDaily');
     Route::get('daily/list-all',     'DailyController@list_all');
@@ -50,6 +38,11 @@ Route::post('logout',       'UserController@logout');
     Route::post('chonso/add',         'ChonsoController@add');
     Route::delete('chonso/delete/{id}', 'ChonsoController@delete');
 
-    Route::get('email/unique/{value}', 'UserController@check_email_unique');
-    Route::get('phone/unique/{value}', 'UserController@check_phone_unique');
+    Route::get('nhapso/list',         'ChonsoController@list_nhapso');
+    Route::post('nhapso/add',         'ChonsoController@add_nhapso');
+    Route::delete('nhapso/delete/{id}', 'ChonsoController@delete_nhapso');
+
+    Route::get('giaoso/list',         'ChonsoController@list_giaoso');
+    Route::post('giaoso/add',         'ChonsoController@add_giaoso');
+    Route::delete('giaoso/delete/{id}', 'ChonsoController@delete_giaoso');
 // });

@@ -11,16 +11,16 @@ use Prettus\Repository\Traits\TransformableTrait;
  *
  * @package namespace App\Entities;
  */
-class Role extends Model implements Transformable
+class RoleModule extends Model implements Transformable
 {
     use TransformableTrait;
 
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['uuid',
-    'name',];
-
+    protected $fillable = ['quyen',
+    'route','name'];
 }

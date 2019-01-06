@@ -76,7 +76,7 @@ class UserController extends Controller
         try {
             $email      = $request->get('email');
             $password   = $request->get('password');
-            $item       = $this->repository->findByField(['email'   => $email])->first();
+            $item       = $this->repository->findByEmailField($email)->first();
 
             // Wrong email - return Fail result
             if (empty($item)) {
@@ -96,7 +96,7 @@ class UserController extends Controller
             //----------------------------------------
             // 1. Get Permission Route List & Role List of logged user
             //----------------------------------------
-            // $routeList  = $this->repository->getRouteList($item->id);
+            $routeList  = $this->repository->getRouteList($item->quyen);
             // $roleList   = $this->repository->getRoleList($item->id);
 
             //----------------------------------------
@@ -104,35 +104,33 @@ class UserController extends Controller
             //----------------------------------------
             $date = new \DateTime();
             //date_add($date, date_interval_create_from_date_string('2 days'));
-            date_add($date, date_interval_create_from_date_string('2 days'));
-            $timestamp  = $date->getTimestamp();
+            date_add($date, date_interval_create_from_date_string('1 days'));
+            $timestamp  = $date->getTimestamp();  
 
             //----------------------------------------
             // 3. Generate new token value
             //----------------------------------------
             $tokenContent = array(
-                //"iss" => "http://example.org",
                 "exp" => $timestamp,
                 "context"   => [
-                    "id"            => $item->id,
+                    "user_id"       => $item->id,
                     "email"         => $item->email,
                     "name"          => $item->name,
-                    // "route_list"    => $routeList,
-                    //"role"  => $item->role,
-                    "client_ids"    => $item->client_ids,
+                    "quyen"         => $item->quyen,
+                    "client_id"     => $item->client_id,
+                    'route_list'    => $routeList
                 ]
             );
             $token = JWT::encode($tokenContent, config('app.jwt-key'));
 
-            //------- Log Message --------
-            //$message    = __('user.log_login') . ' - ' . __('user.login_success');
-
             //------- Return success result -------
             $returnData   = [
-                'token'         => $token,
-                // 'route_list'    => base64_encode(json_encode($routeList)),
-                // 'role_list'     => base64_encode(json_encode($roleList)),
-                'cap_daily'         => 'cap1'
+                "user_id"       => $item->id,
+                "token"         => $token,
+                "quyen"         => $item->quyen,
+                "client_id"     => $item->client_id,
+                "cap"           => $item->daily_id==0?"cap0":$item->daily->cap,
+                "route_list"     =>  $routeList
             ];
 
             //------- Log ---------

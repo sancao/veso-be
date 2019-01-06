@@ -23,23 +23,27 @@ class JsonWebToken
     {
         $token  = $request->header('x-token', '');
 
+        // var_dump( $token);die;
+
         // Get URL without prefix
         $path   = str_replace($request->route()->getPrefix() .'/', '', $request->path());
 
+        // var_dump( $path);die;
+
         // Create global "client" config value
-        config(['client' => (int)$request->header('client')]);
+        config(['quyen' => (int)$request->header('quyen')]);
+
+        // var_dump($request->header('client'));die;
 
         // Check token & get user data
-        $userInfo   = $this->_checkValidToken($token, $path, config('client'));
+        $userInfo   = $this->_checkValidToken($token, $path, config('quyen'));
+
+        // var_dump( $userInfo);die;
 
         // Token exception
         if (!($userInfo['status'])) {
             return response()->json($userInfo, 400);
         }
-
-        //---------------------------------------------
-        // Store $userInfo['data'] to config if needed
-        //---------------------------------------------
 
         return $next($request);
     }
@@ -51,7 +55,7 @@ class JsonWebToken
      * @param $client
      * @return array
      */
-    private function _checkValidToken($token, $requestPath, $client)
+    private function _checkValidToken($token, $requestPath, $quyen)
     {
 
         // Initial result
@@ -69,8 +73,10 @@ class JsonWebToken
             //Get logged data
             $context = $decoded_array['context'];
 
+            // var_dump($quyen);die;
+
             // Check requestPath is valid permission & Client is valid for user
-            if ((in_array($requestPath, $context->route_list)) && (in_array($client, $context->client_ids))) {
+            if ($context->quyen==='admin'|| (in_array($requestPath, $context->route_list))) {
                 $success = true;
                 $message = 'Success';
                 $data = $context;

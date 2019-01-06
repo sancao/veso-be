@@ -24,7 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            // $table->enum('cap_daily', array('cap1', 'cap2','cap3','cap4'))->default("cap4");
+            $table->integer('client_id')->default(0);
             $table->enum('quyen', array('admin', 'daily','nhanvien','banve'))->default("nhanvien");
             $table->boolean('status')->default(false);
             $table->boolean('deleted')->default(false);

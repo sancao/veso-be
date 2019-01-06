@@ -7,7 +7,10 @@ use Prettus\Repository\Criteria\RequestCriteria;
 use App\Repositories\UserRepository;
 use App\Entities\User;
 use App\Entities\Chonso;
+use App\Entities\Nhapso;
+use App\Entities\Giaoso;
 use App\Entities\Naptien;
+use App\Entities\RoleModule;
 use App\Validators\UserValidator;
 
 use Illuminate\Support\Facades\DB;
@@ -28,6 +31,17 @@ class UserRepositoryEloquent extends BaseRepository
         return User::class;
     }
 
+    public function getRouteList($quyen){
+        $items = RoleModule::where('quyen',$quyen)
+        ->select('route')->get();
+        return $items;
+    }
+
+    public function findByEmailField($email){
+        $item = User::with(['daily'])->where(['email'   => $email])->first();
+        return $item;
+    }
+
     public function updateRole($param)
     {
         // uuid & role_list
@@ -44,32 +58,6 @@ class UserRepositoryEloquent extends BaseRepository
             $item->role_id = $value;
             $item->save();
         }
-    }
-
-    /**
-     * Get all modules of current user
-     * @param $userId
-     * @return array|\Illuminate\Support\Collection
-     */
-    public function getRouteList($userId)
-    {
-
-         //---------------------------------------------------
-        // Get Module Route list Array base on User ID
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        $result = DB::table('modules')
-            ->leftJoin('role_modules', 'modules.id', '=', 'role_modules.module_id')
-            ->leftJoin('roles', 'role_modules.role_id', '=', 'roles.id')
-            ->leftJoin('user_roles', 'roles.id', '=', 'user_roles.role_id')
-            ->where('user_roles.user_id', $userId)
-            //->distinct()
-            ->get(['modules.route']);
-
-        $result = $result->pluck('route')->toArray();
-        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        return $result;
     }
 
     public function getRoleList($userId)
@@ -184,6 +172,89 @@ class UserRepositoryEloquent extends BaseRepository
         return $list->paginate(10);
     }
 
+    public function delete_chonso($id){
+        if($id){
+            $so= Chonso::find($id);
+            $so->deleted=1;
+            return $so->update();
+        }
+        
+        return false;
+    }
+
+    // nhập số
+    public function save_nhapso(array $arr){
+        $nhapso=Nhapso::find($arr["id"]);
+        
+        if($nhapso)
+        {
+            $nhapso->daily_id=$arr["daily_id"];
+            $nhapso->user_id=$arr["user_id"];
+            $nhapso->tuso=$arr["tuso"];
+            $nhapso->denso=$arr["denso"];
+            $nhapso->menhgia=$arr["menhgia"];
+            $nhapso->update();
+        }else
+        {
+            $nhapso=new Nhapso($arr);
+            $nhapso->save();
+        }
+
+        return Nhapso::with(['daily','user'])->find($nhapso->id);
+    }
+
+    public function list_nhapso(){
+        $list= Nhapso::where('deleted',0);
+        return $list->paginate(10);
+    }
+
+    public function delete_nhapso($id){
+        if($id){
+            $so= Nhapso::find($id);
+            $so->deleted=1;
+            return $so->update();
+        }
+        
+        return false;
+    }
+
+    // giao số
+    public function save_giaoso(array $arr){
+        $giaoso=Giaoso::find($arr["id"]);
+        
+        if($giaoso)
+        {
+            $giaoso->daily_id=$arr["daily_id"];
+            $giaoso->user_id=$arr["user_id"];
+            $giaoso->tuso=$arr["tuso"];
+            $giaoso->denso=$arr["denso"];
+            $giaoso->menhgia=$arr["menhgia"];
+            $giaoso->update();
+        }else
+        {
+            $giaoso=new Giaoso($arr);
+            $giaoso->save();
+        }
+
+        return Giaoso::with(['daily','user'])->find($giaoso->id);
+    }
+
+    public function list_giaoso(){
+        $list= Giaoso::with(['daily','user'])->where('deleted',0);
+        return $list->paginate(10);
+    }
+
+    public function delete_giaoso($id){
+        if($id){
+            $so= Giaoso::find($id);
+            $so->deleted=1;
+            return $so->update();
+        }
+        
+        return false;
+    }
+
+    ////////////////////////////////
     public function list_naptien(){
         $list= Naptien::where('trangthai',0);
         return $list->paginate(10);
@@ -208,15 +279,5 @@ class UserRepositoryEloquent extends BaseRepository
         }
 
         return true;
-    }
-
-    public function delete_so($id){
-        if($id){
-            $so= Chonso::find($id);
-            $so->deleted=1;
-            return $so->update();
-        }
-        
-        return false;
     }
 }
